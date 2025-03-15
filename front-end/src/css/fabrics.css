@@ -1,0 +1,25 @@
+/*fabric*/
+.fabric-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.fabric-item {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.fabric-item img {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+}
+
+main {
+    min-height: 720px;
+}

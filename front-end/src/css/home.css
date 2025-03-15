@@ -1,0 +1,153 @@
+
+/* Horizontal Sections */
+.section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.section-content {
+    z-index: 1;
+    padding: 20px;
+}
+
+.section:nth-child(odd) {
+    background-color: rgba(44, 62, 80, 0.8);
+}
+
+/* Coupons Section */
+.coupons {
+    font-size: 100px;
+
+    font-family: Chiller;
+    color: white;
+}
+
+/* Latest Collections */
+.collections {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.collections img {
+    width: 50%;
+    border-radius: 10px;
+}
+
+.latest {
+    font-size: 50px;
+    margin-right: 1150px;
+    font-family: Chiller;
+    color: black;
+    margin-bottom: -10px;
+
+}
+
+/* Footer */
+footer {
+    background-color: #34495E;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-sections {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+}
+
+.footer-sections div {
+    text-align: left;
+}
+
+.footer-icons img {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+}
+
+.discover {
+    margin-right: 1000px;
+    color: black;
+    ;
+    font-weight: bold;
+
+}
+
+.welcome {
+    margin-right: 1000px;
+    color: black;
+}
+
+.previous,
+.next {
+    position: relative;
+    font-size: 50px;
+
+}
+
+.myslide {
+    display: none;
+}
+
+.move-icon {
+
+    width: 500px;
+    height: 80px;
+
+    margin-bottom: 600px;
+}
+
+.previous {
+    margin-left: -200px;
+    width: 30px;
+    padding: 5px;
+    background-color: #afa8a845;
+    box-shadow: -2px -2px 15px #8080804d;
+}
+
+.next {
+    margin-left: 1000px;
+    width: 30px;
+    padding: 5px;
+    background-color: #afa8a845;
+    box-shadow: 2px -2px 15px #8080804d;
+}
+
+.dot1 {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+    margin: 10px;
+    display: inline-block;
+}
+
+.dot-content {
+    background-color: grey;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}

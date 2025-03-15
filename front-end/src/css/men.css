@@ -1,0 +1,95 @@
+/* Style for the product list container */
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow products to wrap to the next line if needed */
+    justify-content: space-between;
+    /* Space the items out evenly */
+    gap: 20px;
+    /* Space between the product items */
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    /* Optional: Max width for the container */
+}
+
+/* Style for each product card */
+.product-card {
+    flex: 1 1 calc(25% - 20px);
+    /* Makes each product take up 25% minus the gap */
+    box-sizing: border-box;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    /* Make sure 'a' tags act as block-level elements */
+    text-align: center;
+    /* Center the content */
+}
+
+/* Make the images responsive */
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    /* Rounded corners for the image */
+    margin-bottom: 10px;
+}
+
+/* Style for the brand name */
+.brand-name {
+    font-family: 'Papyrus', sans-serif;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Style for the product description */
+.product-description {
+    font-family: 'Calibri Light', sans-serif;
+    font-size: 15px;
+    margin: 10px 0;
+}
+
+/* Style for the product price */
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.product-price strike {
+    color: red;
+}
+
+.discount {
+    color: orange;
+    font-weight: normal;
+}
+
+/* Hover effect */
+.product-card:hover {
+    transform: translateY(-5px);
+    /* Slightly raise the product card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries for Responsive Layout */
+
+/* For tablet screen sizes */
+@media (max-width: 1024px) {
+    .product-card {
+        flex: 1 1 calc(50% - 20px);
+        /* Two items per row */
+    }
+}
+
+/* For mobile screen sizes */
+@media (max-width: 768px) {
+    .product-card {
+        flex: 1 1 100%;
+        /* One item per row on mobile */
+    }
+}

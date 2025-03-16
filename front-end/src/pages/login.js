@@ -18,7 +18,7 @@ function Login() {
             "username": userNameRef.current.value,
             "password": passwordRef.current.value
         }
-        axios.post('/api/user', userData)
+        axios.post('/authenticateUser', userData)
             .then(response => {
                 if (response.data.user_name != undefined) {
                     toast.success('User logged in successfully', {
@@ -32,7 +32,7 @@ function Login() {
                         theme: "light",
                         transition: Bounce,
                     });
-                    login({ user_name: response.data.user_name });
+                    login({ user_name: response.data.user_name, id: response.data.id });
                 } else {
                     toast.error('Authentication failed, invalid user or password:' + userNameRef.current.value, {
                         position: "top-center",

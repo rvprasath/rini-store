@@ -1,0 +1,131 @@
+/* Global Body */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Product List Page */
+.productListPage-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.productListPage h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Product Cards Container */
+.productListPage-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Single Product Card */
+.productListPage-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    /* overflow: hidden; */
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.productListPage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Product Image */
+.productListPage-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Product Details Section */
+.productListPage-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.productListPage-details h3 {
+    font-size: 1.6rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+/* Price Section */
+.productListPage-price-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.productListPage-price {
+    font-size: 1.4rem;
+    color: #3498db;
+    font-weight: 600;
+}
+
+.productListPage-strike-price {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    text-decoration: line-through;
+}
+
+/* Category */
+.productListPage-category {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+/* View Details Button */
+.productListPage-view-details-btn {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.productListPage-view-details-btn:hover {
+    background-color: #2980b9;
+}
+
+div {
+    box-sizing: unset;
+}
+
+.delete-product {
+    position: absolute;
+    background: red;
+    padding: 2px 10px;
+    color: #ffffff;
+    border-radius: 25px;
+    right: -10px;
+    top: -10px;
+    cursor: pointer;
+    display: none;
+}
+
+.productListPage-card:hover .delete-product {
+    display: block;
+}

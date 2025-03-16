@@ -59,3 +59,24 @@ nav a {
 .footer-sections a {
     color: #fff;
 }
+
+ul li a {
+    color: #fff;
+}
+
+.cartcount {
+    background: red;
+    padding: 0px 8px;
+    border-radius: 15px;
+    color: #fff;
+    position: absolute;
+    bottom: -5px;
+    left: -5px;
+    box-shadow: 1px 1px 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.cartcount-container {
+    position: relative;
+}

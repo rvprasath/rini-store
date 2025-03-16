@@ -1,0 +1,108 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for the Cart Page */
+.cart-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Title for the Cart Page */
+h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+/* Cart Items Container (Vertical Layout) */
+.cart-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Individual Cart Item (Styled as a Row) */
+.cart-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+    transition: all 0.3s ease;
+    justify-content: space-between;
+}
+
+.cart-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Left Side of the Cart Item (Image + Product Info) */
+.cart-item-left {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Image of the product */
+.cart-item-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Product Name, Price, and Strike Price */
+.cart-item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cart-item-name {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin: 0;
+    font-weight: bold;
+}
+
+.cart-item-price {
+    font-size: 1.4rem;
+    color: #3498db;
+    font-weight: 600;
+}
+
+.cart-item-strike-price {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    text-decoration: line-through;
+    margin-top: 0.5rem;
+}
+
+/* Action Buttons Section (Remove Button) */
+.cart-item-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.remove-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #c0392b;
+}

@@ -1,31 +1,67 @@
 import "../css/men.css"
-import blazer from "../images/mblazer1_1.png"
 import blazerModel from "../models/Jacket.glb"
-import shirt1 from "../images/mshirt1_1.png"
-import cargo from "../images/cargo1_1.png"
-import shirt3 from "../images/shirt3_1.png"
 import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios"
 
 function Men() {
+
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get("/category/product/1");
+                let productsResponse = response.data;
+                for (let i = 0; i < productsResponse.length; i++) {
+                    let imageArr = [];
+                    if (productsResponse[i].image_path.includes(",")) {
+                        let image_path_arr = productsResponse[i].image_path.split("/");
+                        let images = image_path_arr[2].split(",");
+                        let dir = "/" + image_path_arr[1] + "/";
+                        for (let j = 0; j < images.length; j++) {
+                            imageArr.push(dir + images[j]);
+                        }
+                        productsResponse[i].imagePaths = imageArr;
+                    } else {
+                        productsResponse[i].imagePaths = [productsResponse[i].image_path];
+                    }
+                }
+                setProducts(productsResponse);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
     return (
         <>
             <main>
                 <div class="mennu-header"><h2>Men's Wear</h2></div>
                 <div class="product-list">
-                    <Link
-                        className="product-card"
-                        to={{
-                            pathname: "/preview",
-                            search: `?desc=Men's Solid Regular Fit Formal White Blazer&strikeprice=4999&price=3999&image=${blazerModel}`,
-                        }}
-                    >
-                        <img src={blazer} alt="blazer1" />
-                        <p class="brand-name">RINI</p>
-                        <p class="product-description">Men's Solid Regular Fit Formal White Blazer</p>
-                        <h3 class="product-price">₹3999 <strike>₹4999</strike><p class="discount">(80% off)</p></h3>
-                    </Link>
 
-                    <Link
+                    {products.length > 0 ? (
+                        products.map((product) => (
+                            <Link
+                                className="product-card"
+                                to={{
+                                    pathname: "/preview",
+                                    search: `?id=${product.id}`,
+                                }}
+                            >
+                                <img src={product.imagePaths[0]} alt="blazer1" />
+                                {/* <p class="brand-name">RINI</p> */}
+                                <h2 class="product-description">{product.product_name}</h2>
+                                <h3 class="product-price">₹{product.price}&nbsp;<strike>₹{product.strike_price}</strike>&nbsp;<p class="discount">(80% off)</p></h3>
+                            </Link>
+                        ))
+                    ) : (
+                        <p>No products available.</p>
+                    )}
+
+                    {/* <Link
                         className="product-card"
                         to={{
                             pathname: "/preview",
@@ -50,7 +86,7 @@ function Men() {
                         <p class="brand-name">RINI</p>
                         <p class="product-description">Men's Full Sleeve Corduroy Striped Casual Jacket</p>
                         <h3 class="product-price">₹3899</h3>
-                    </a>
+                    </a> */}
                 </div>
             </main>
         </>

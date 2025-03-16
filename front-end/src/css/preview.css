@@ -13,6 +13,10 @@
     margin: 50px 0px;
 }
 
+.buy-buton {
+    text-align: center;
+}
+
 /* Product image (left section) */
 .product-image {
     flex: 1;

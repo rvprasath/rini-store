@@ -2,11 +2,8 @@
 .product-list {
     display: flex;
     flex-wrap: wrap;
-    /* Allow products to wrap to the next line if needed */
-    justify-content: space-between;
-    /* Space the items out evenly */
     gap: 20px;
-    /* Space between the product items */
+    justify-content: flex-start;
     padding: 20px;
     margin: 0 auto;
     max-width: 1200px;
@@ -15,7 +12,8 @@
 
 /* Style for each product card */
 .product-card {
-    flex: 1 1 calc(25% - 20px);
+    width: 23%;
+    /* flex: 1 1 calc(25% - 20px); */
     /* Makes each product take up 25% minus the gap */
     box-sizing: border-box;
     padding: 15px;
@@ -24,9 +22,7 @@
     background-color: #fff;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: block;
-    /* Make sure 'a' tags act as block-level elements */
     text-align: center;
-    /* Center the content */
 }
 
 /* Make the images responsive */

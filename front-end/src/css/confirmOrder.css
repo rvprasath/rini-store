@@ -1,0 +1,153 @@
+.confirm-order-container {
+    font-family: Arial, sans-serif;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.order-summary {
+    margin-bottom: 20px;
+}
+
+.order-summary h2 {
+    font-size: 1.5rem;
+    color: #444;
+}
+
+.order-summary ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-summary li {
+    padding: 5px 0;
+}
+
+.total-price {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.order-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-button,
+.cancel-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.confirm-button:disabled {
+    background-color: #d6d6d6;
+}
+
+.confirm-button:hover:enabled {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+.order-success {
+    text-align: center;
+    color: #28a745;
+}
+
+.order-success h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Ticket Icon (Custom CSS Checkmark) */
+.ticket-icon {
+    width: 180px;
+    height: 100px;
+    background-color: #28a745;
+    position: relative;
+    margin: 0 auto 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Perforation on Left and Right of the Ticket */
+.ticket-icon::before,
+.ticket-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #1c7430;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.ticket-icon::before {
+    left: -10px;
+    /* Left perforation */
+}
+
+.ticket-icon::after {
+    right: -10px;
+    /* Right perforation */
+}
+
+/* Custom Checkmark Inside the Ticket */
+.ticket-icon .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: rotate(190deg) translate(30px, 25px);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ticket-icon .checkmark::before {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 20px;
+    background-color: white;
+    transform: rotate(45deg);
+    transform-origin: 0 0;
+}
+
+.ticket-icon .checkmark::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 20px;
+    background-color: white;
+    transform: rotate(-45deg);
+    transform-origin: 0 0;
+}

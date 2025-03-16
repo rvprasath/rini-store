@@ -4,33 +4,23 @@ import freeShipping from "../images/free-shipping.png";
 import brand from "../images/brand.png";
 import receipient from "../images/recipient.png";
 import replacement from "../images/replacement.png";
-import blazer from "../models/shirt_rig1.glb";
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as CANNON from 'cannon-es';
 import * as posenet from '@tensorflow-models/posenet';
+import axios from "axios";
+import { toast, Bounce } from "react-toastify";
 
 function Preview() {
     const location = useLocation();
-    const [description, setDescription] = useState('');
-    const [strikePrice, setStrikePrice] = useState('');
-    const [price, setPrice] = useState('');
-
-    useEffect(() => {
-        // Extract URL parameters
-        const urlParams = new URLSearchParams(location.search);
-        setDescription(urlParams.get('desc') || ''); // Default empty string if no value
-        setStrikePrice(urlParams.get('strikeprice') || '');
-        setPrice(urlParams.get('price') || '');
-    }, [location]);
-
+    const [products, setProducts] = useState(null); // Initially set to null to detect loading
+    const [isTryOnActive, setIsTryOnActive] = useState(false);
     const videoElement = useRef(null);
     const canvasContainer = useRef(null);
     const tryOnBtn = useRef(null);
 
-    const [isTryOnActive, setIsTryOnActive] = useState(false);
     const [poseNet, setPoseNet] = useState(null);
     const [model, setModel] = useState(null);
 
@@ -44,14 +34,52 @@ function Preview() {
     const armRightTopBoneName = 'arm_right_top';
     const armRightBotBoneName = 'arm_right_bot';
 
+    let id;
     useEffect(() => {
-        initScene();
-        return () => {
-            if (videoElement.current) {
-                videoElement.current.srcObject?.getTracks().forEach(track => track.stop());
+        const urlParams = new URLSearchParams(location.search);
+        id = urlParams.get('id');
+    }, [location]);
+
+    // Fetch product data after the component is mounted
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await axios.get(`/product/${id}`);
+                let productsResponse = response.data;
+                // for (let i = 0; i < productsResponse.length; i++) {
+                let imageArr = [];
+                if (productsResponse.image_path.includes(",")) {
+                    let image_path_arr = productsResponse.image_path.split("/");
+                    let images = image_path_arr[2].split(",");
+                    let dir = "/" + image_path_arr[1] + "/";
+                    for (let j = 0; j < images.length; j++) {
+                        if (images[j].includes(".glb")) {
+                            productsResponse.glbPath = dir + images[j];
+                        } else {
+                            imageArr.push(dir + images[j]);
+                        }
+                    }
+                    productsResponse.imagePaths = imageArr;
+                } else {
+                    productsResponse.imagePaths = [productsResponse.image_path];
+                    productsResponse.glbPath = [productsResponse.image_path];
+                }
+                // }
+                setProducts(productsResponse);
+            } catch (error) {
+                console.error("Error fetching product:", error);
             }
         };
-    }, []);
+
+        fetchProduct();
+    }, [id]);
+
+    // Initialize the scene only after product data is fetched
+    useEffect(() => {
+        if (products) {
+            initScene();
+        }
+    }, [products]); // Trigger when 'products' is set
 
     const startCamera = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
@@ -167,7 +195,7 @@ function Preview() {
         world.addBody(body);
 
         const loader = new GLTFLoader();
-        loader.load(blazer, (gltf) => {
+        loader.load(products.glbPath, (gltf) => { // Use products.image_path here
             const model = gltf.scene;
             model.scale.set(1, 1, 1); // Adjusted scaling
             model.traverse((child) => {
@@ -200,14 +228,82 @@ function Preview() {
         setIsTryOnActive(true);
     };
 
+    const addToCart = async (productId) => {
+        if (localStorage.getItem('user') != null) {
+            const cartData = {
+                "userId": JSON.parse(localStorage.getItem('user')).id,
+                "productId": productId
+            }
+            const response = await axios.post(`/addToCart`, cartData).then(response => {
+                toast.success('Product added to the cart', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+                setTimeout(() => {
+                    window.location.reload()
+                }, 500);
+            }).catch(error => {
+                toast.error(error.response.data.error, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                });
+            })
+        } else {
+            toast.info('Login to add products to the cart', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const handleBuyNowClick = (e) => {
+        if (!user) {
+            toast.info('Login to buy products', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            e.preventDefault();
+        }
+    };
+
     return (
         <>
             <main>
-                <div class="mennu-header"><h2>Product Details</h2></div>
+                <div className="mennu-header"><h2>Product Details</h2></div>
                 <div className="container">
                     <div className="product">
                         <div className="product-image">
-                            <div class="video-container">
+                            <div className="video-container">
                                 <video ref={videoElement} id="video" width="640" height="480"></video>
                             </div>
                             <div className="canvas-container" ref={canvasContainer}></div>
@@ -215,11 +311,11 @@ function Preview() {
 
                         <div className="product-details">
                             <h1 className="product-title">RINI</h1>
-                            <h3 className="product-description" id="desc">{description}</h3>
+                            <h3 className="product-description" id="desc">{products?.product_name}</h3>
 
                             <div className="product-price">
-                                <span id="price">{`₹${price}`}</span>
-                                <span className="strike-price" id="strikePrice">{`₹${strikePrice}`}</span>
+                                <span id="price">₹{products?.price}</span>
+                                <span className="strike-price" id="strikePrice">₹{products?.strike_price}</span>
                                 <span className="discount">&nbsp;(80% off)</span>
                             </div>
 
@@ -234,7 +330,9 @@ function Preview() {
                                     </select>
                                 </div>
 
-                                <button ref={tryOnBtn} onClick={handleTryOnClick} id="try-on-btn">Try On</button>
+                                <div>
+                                    <button ref={tryOnBtn} onClick={handleTryOnClick} id="try-on-btn">Try On</button>
+                                </div>
                             </div>
 
                             <div className="delivery-info">
@@ -244,8 +342,16 @@ function Preview() {
                             </div>
 
                             <div className="product-buttons">
-                                <button className="btn btn-success">Add To Cart</button>
-                                <button className="btn btn-warning">Buy Now</button>
+                                <button className="btn btn-success" onClick={() => addToCart(products.id)}>Add To Cart</button>
+                                {user ? (
+                                    <Link to="/confirmOrder" className="btn btn-warning buy-buton" onClick={handleBuyNowClick}>
+                                        Buy Now
+                                    </Link>
+                                ) : (
+                                    <button className="btn btn-warning" onClick={handleBuyNowClick}>
+                                        Login to Buy
+                                    </button>
+                                )}
                             </div>
 
                             <div className="product-shipping">

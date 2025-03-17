@@ -533,3 +533,11 @@
 .singleImage .slick-arrow:before {
     color: #0000004a !important;
 }
+
+.model-tag {
+    position: absolute;
+    background: #33c7b7;
+    padding: 0px 10px;
+    border-radius: 3px;
+    top: 5px;
+}

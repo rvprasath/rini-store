@@ -353,6 +353,7 @@ function Preview() {
                                     {products.glbPath.includes(".glb") ?
                                         <div className="slider-item">
                                             <div className="product-image">
+                                                <div class="model-tag">3D Model</div>
                                                 <div className="video-container">
                                                     <video ref={videoElement} id="video" width="640" height="480"></video>
                                                 </div>

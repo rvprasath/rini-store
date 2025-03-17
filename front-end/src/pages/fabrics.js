@@ -8,7 +8,7 @@ function Fabrics() {
     return (
         <>
             <main>
-                <div class="mennu-header"><h2>Fabric customization</h2></div>
+                <div class="menu-header"><h2>Fabric customization</h2></div>
                 <div class="fabric-list">
                     <div class="fabric-item" onclick="showDetails('white')">
                         <img src={satinFabric} alt="White Fabric" />

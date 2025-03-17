@@ -187,7 +187,7 @@
 
 .product {
     display: flex;
-    width: 1280px;
+    width: 1400px;
     gap: 15px;
 }
 
@@ -214,4 +214,322 @@
         width: 100%;
         margin-bottom: 20px;
     }
+}
+
+/* ProductSlider.css */
+.product-slider-container {
+    max-width: 700px;
+}
+
+/* Ensures slick-slider has a neat container */
+.slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Slider Item */
+.slider-item {
+    width: 100%;
+    position: relative;
+}
+
+/* Image Container */
+.product-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Image Styling */
+.product-image-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+    object-fit: contain;
+}
+
+/* Zoom Effect on Hover */
+.product-image-img:hover {
+    transform: scale(1.1);
+    /* Zoom effect */
+}
+
+/* 3D Model Video */
+.video-container {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Canvas Container */
+.canvas-container {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+/* Slick Dot Navigation (Customized for clean look) */
+.slick-dots {
+    bottom: 10px;
+    /* Move dots to bottom */
+    display: flex;
+    justify-content: center;
+}
+
+.slick-dots li button {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    transition: background 0.3s;
+}
+
+.slick-dots li.slick-active button {
+    background: #3498db;
+    /* Active dot color */
+}
+
+/* Optional: Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .product-image-img {
+        max-width: 100%;
+        object-fit: cover;
+    }
+}
+
+/* ProductSlider.css */
+
+/* Custom Arrow Styling */
+.slick-prev,
+.slick-next {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    background: linear-gradient(135deg, #3498db, #9b59b6);
+    /* Gradient background */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 24px;
+    font-weight: bold;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for prominence */
+}
+
+/* Left Arrow */
+.slick-prev {
+    left: 15px;
+    /* Adjust position for the left arrow */
+}
+
+/* Right Arrow */
+.slick-next {
+    right: 15px;
+    /* Adjust position for the right arrow */
+}
+
+/* Arrow Hover Effect */
+.slick-prev:hover,
+.slick-next:hover {
+    background: linear-gradient(135deg, #2980b9, #8e44ad);
+    /* Darker gradient on hover */
+    transform: translateY(-50%) scale(1.1);
+    /* Slightly enlarge the arrows on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    /* Increase shadow on hover */
+}
+
+/* Arrow Icon Size and Position */
+.arrow-icon {
+    font-size: 30px;
+    /* Make the icon larger */
+    font-weight: bold;
+    line-height: 1;
+    position: relative;
+    top: -2px;
+    /* Adjust vertical alignment of the arrow */
+}
+
+/* Slick Dots (for pagination) */
+.slick-dots {
+    bottom: 20px;
+    /* Adjust dot position */
+    display: flex;
+    justify-content: center;
+}
+
+.slick-dots li button {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    transition: background 0.3s ease;
+}
+
+.slick-dots li.slick-active button {
+    background: #3498db;
+    /* Active dot color */
+}
+
+/* Hover state for dots */
+.slick-dots li button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    /* Slightly darker background when hovered */
+}
+
+/* Optional: Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+
+    .slick-prev,
+    .slick-next {
+        padding: 15px;
+        /* Slightly smaller padding on smaller screens */
+    }
+}
+
+/* ProductSlider.css */
+
+/* Custom Arrow Styling */
+.slick-prev,
+.slick-next {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    background: linear-gradient(135deg, #3498db, #9b59b6);
+    /* Gradient background */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    /* Increase padding for bigger arrows */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 36px;
+    /* Big font-size for the arrow */
+    font-weight: bold;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for prominence */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Left Arrow (Prev) */
+.slick-prev {
+    left: 10px;
+    /* Position the left arrow inside the slider */
+}
+
+/* Right Arrow (Next) */
+.slick-next {
+    right: 10px;
+    /* Position the right arrow inside the slider */
+}
+
+/* Arrow Hover Effect */
+.slick-prev:hover,
+.slick-next:hover {
+    background: linear-gradient(135deg, #2980b9, #8e44ad);
+    /* Darker gradient on hover */
+    transform: translateY(-50%) scale(1.1);
+    /* Slightly enlarge the arrows on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    /* Increase shadow on hover */
+}
+
+/* Slick Dots (pagination) */
+.slick-dots {
+    bottom: 20px;
+    /* Adjust dot position */
+    display: flex;
+    justify-content: center;
+}
+
+.slick-dots li button {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    transition: background 0.3s ease;
+}
+
+.slick-dots li.slick-active button {
+    background: #3498db;
+    /* Active dot color */
+}
+
+/* Hover state for dots */
+.slick-dots li button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    /* Slightly darker background when hovered */
+}
+
+/* Optional: Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+
+    .slick-prev,
+    .slick-next {
+        font-size: 28px;
+        /* Slightly smaller font-size on tablet */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .slick-prev,
+    .slick-next {
+        font-size: 24px;
+        /* Slightly smaller font-size on mobile */
+        padding: 12px;
+        /* Slightly smaller padding on mobile */
+    }
+}
+
+.slick-next {
+    right: 40px !important;
+    box-shadow: none;
+    top: 45% !important;
+}
+
+.slick-prev {
+    left: 10px !important;
+    box-shadow: none;
+    top: 45% !important;
+}
+
+.slick-next:hover {
+    box-shadow: none;
+}
+
+.slick-prev:hover {
+    box-shadow: none;
+}
+
+.slick-next::before {
+    color: #000000 !important;
+    font-size: 50px !important;
+}
+
+.slick-prev::before {
+    color: #000000 !important;
+    font-size: 50px !important;
+}
+
+.singleImage .slick-arrow:before {
+    color: #0000004a !important;
 }

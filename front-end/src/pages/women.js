@@ -39,7 +39,7 @@ function Women() {
     return (
         <>
             <main>
-                <div class="mennu-header"><h2>Women's Wear</h2></div>
+                <div class="menu-header"><h2>Women's Wear</h2></div>
                 <div class="product-list">
                     {products.length > 0 ? (
                         products.map((product) => (

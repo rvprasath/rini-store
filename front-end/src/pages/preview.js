@@ -12,6 +12,9 @@ import * as CANNON from 'cannon-es';
 import * as posenet from '@tensorflow-models/posenet';
 import axios from "axios";
 import { toast, Bounce } from "react-toastify";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick';
 
 function Preview() {
     const location = useLocation();
@@ -23,6 +26,8 @@ function Preview() {
 
     const [poseNet, setPoseNet] = useState(null);
     const [model, setModel] = useState(null);
+    const [isSingleImage, setIsSingleImage] = useState(false);
+    const [tryOnOff, setTryOnOff] = useState("off");
 
     let world, physicsMaterial, body;
     let leftShoulder, rightShoulder, leftHand, rightHand;
@@ -33,6 +38,15 @@ function Preview() {
     const armLeftBotBoneName = 'arm_left_bot';
     const armRightTopBoneName = 'arm_right_top';
     const armRightBotBoneName = 'arm_right_bot';
+
+    useEffect(() => {
+        // Check if there is only one image
+        if (products != null && products.image_path.split(",").length === 1) {
+            setIsSingleImage(true);
+        } else {
+            setIsSingleImage(false);
+        }
+    }, [products]);
 
     let id;
     useEffect(() => {
@@ -55,6 +69,7 @@ function Preview() {
                     for (let j = 0; j < images.length; j++) {
                         if (images[j].includes(".glb")) {
                             productsResponse.glbPath = dir + images[j];
+                            setTryOnOff("on")
                         } else {
                             imageArr.push(dir + images[j]);
                         }
@@ -63,6 +78,7 @@ function Preview() {
                 } else {
                     productsResponse.imagePaths = [productsResponse.image_path];
                     productsResponse.glbPath = [productsResponse.image_path];
+                    setTryOnOff("off")
                 }
                 // }
                 setProducts(productsResponse);
@@ -76,10 +92,20 @@ function Preview() {
 
     // Initialize the scene only after product data is fetched
     useEffect(() => {
-        if (products) {
+        if (products && products.glbPath.includes(".glb")) {
             initScene();
         }
     }, [products]); // Trigger when 'products' is set
+
+    const stopCamera = () => {
+        const stream = videoElement.current.srcObject;
+
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            videoElement.current.srcObject = null;
+        }
+    };
 
     const startCamera = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
@@ -222,10 +248,16 @@ function Preview() {
         animate();
     };
 
-    const handleTryOnClick = () => {
-        videoElement.current.style.opacity = 1;
-        startCamera();
-        setIsTryOnActive(true);
+    const handleTryOnOffClick = () => {
+        if (tryOnOff == "on") {
+            setTryOnOff("off")
+            videoElement.current.style.opacity = 1;
+            startCamera();
+            setIsTryOnActive(true);
+        } else {
+            setTryOnOff("on")
+            stopCamera();
+        }
     };
 
     const addToCart = async (productId) => {
@@ -296,17 +328,50 @@ function Preview() {
         }
     };
 
+    const settings = {
+        // dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: false,
+        // autoplaySpeed: 3000,
+        fade: true,
+        // pauseOnHover: true,
+        arrows: true
+    };
+
     return (
         <>
             <main>
-                <div className="mennu-header"><h2>Product Details</h2></div>
+                <div className="menu-header"><h2>Product Details</h2></div>
                 <div className="container">
                     <div className="product">
-                        <div className="product-image">
-                            <div className="video-container">
-                                <video ref={videoElement} id="video" width="640" height="480"></video>
-                            </div>
-                            <div className="canvas-container" ref={canvasContainer}></div>
+                        <div className={`product-slider-container ${isSingleImage ? 'singleImage' : ''}`}>
+                            {products != null ?
+                                < Slider {...settings}>
+                                    {products.glbPath.includes(".glb") ?
+                                        <div className="slider-item">
+                                            <div className="product-image">
+                                                <div className="video-container">
+                                                    <video ref={videoElement} id="video" width="640" height="480"></video>
+                                                </div>
+                                                <div className="canvas-container" ref={canvasContainer}></div>
+                                            </div>
+                                        </div>
+                                        : null
+                                    }
+                                    {products.imagePaths && products.imagePaths.map((image, index) => (
+                                        <div className="slider-item">
+                                            <div className="product-image">
+                                                <div className="video-container">
+                                                    <img height="480" width="640" src={image} alt={`Product Image ${index + 1}`} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </Slider> : <></>
+                            }
                         </div>
 
                         <div className="product-details">
@@ -331,7 +396,13 @@ function Preview() {
                                 </div>
 
                                 <div>
-                                    <button ref={tryOnBtn} onClick={handleTryOnClick} id="try-on-btn">Try On</button>
+                                    {products != null && products.glbPath.includes(".glb") ?
+                                        tryOnOff == "on" ?
+                                            <button ref={tryOnBtn} onClick={handleTryOnOffClick} id="try-on-btn">Try On</button>
+                                            :
+                                            <button ref={tryOnBtn} onClick={handleTryOnOffClick} id="try-on-btn">Try Off</button>
+                                        : null
+                                    }
                                 </div>
                             </div>
 
@@ -375,7 +446,7 @@ function Preview() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </main >
         </>
     );
 }

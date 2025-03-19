@@ -22,6 +22,7 @@ function Men() {
                     for (let j = 0; j < images.length; j++) {
                         imageArr.push(dir + images[j]);
                     }
+                    imageArr.sort((a, b) => (a.endsWith(".glb") ? 1 : b.endsWith(".glb") ? -1 : 0));
                     productsResponse[i].imagePaths = imageArr;
                 } else {
                     productsResponse[i].imagePaths = [productsResponse[i].image_path];

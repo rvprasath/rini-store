@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/confirmOrder.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const ConfirmOrder = () => {
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
-    const order = {
-        items: [
-            { name: "Item 1", quantity: 2, price: 20 },
-            { name: "Item 2", quantity: 1, price: 50 },
-            { name: "Item 3", quantity: 3, price: 10 },
-        ],
-        totalPrice: 120, // Simple calculation of total price
-    };
+    const location = useLocation();
+    const [id, setId] = useState();
+    const [products, setProducts] = useState();
+    const [totalPrice, setTotalPrice] = useState();
 
     const handleConfirmOrder = () => {
         setIsLoading(true);
@@ -29,6 +26,60 @@ const ConfirmOrder = () => {
         navigate("/preview");
     };
 
+    const cancelOrder = () => {
+        setOrderPlaced(false)
+        if (id.split(",").length > 1) {
+            navigate("/cart");
+        } else {
+            navigate("/preview?id=" + id);
+        }
+    }
+
+    useEffect(() => {
+        let isMounted = true; // Track whether the component is mounted
+        const fetchData = async () => {
+            let ids = localStorage.getItem("orderData");
+            let totalPriceSum = 0;
+            const response = await axios.get(`/productIds?ids=${ids}`);
+            let productsResponse = response.data;
+            let imageArr = [];
+    
+            for (let i = 0; i < productsResponse.length; i++) {
+                totalPriceSum += productsResponse[i].price;
+                if (productsResponse[i].image_path.includes(",")) {
+                    let image_path_arr = productsResponse[i].image_path.split("/");
+                    let images = image_path_arr[2].split(",");
+                    let dir = "/" + image_path_arr[1] + "/";
+                    for (let j = 0; j < images.length; j++) {
+                        if (images[j].includes(".glb")) {
+                            productsResponse[i].glbPath = dir + images[j];
+                        } else {
+                            imageArr.push(dir + images[j]);
+                            productsResponse[i].glbPath = [];
+                        }
+                    }
+                    productsResponse[i].imagePaths = imageArr;
+                } else {
+                    productsResponse[i].imagePaths = [productsResponse[i].image_path];
+                    productsResponse[i].glbPath = [productsResponse[i].image_path];
+                }
+            }
+    
+            if (isMounted) { // Only update state if component is still mounted
+                setTotalPrice(totalPriceSum);
+                setProducts(productsResponse);
+                setId(ids);
+            }
+        };
+    
+        fetchData();
+    
+        return () => {
+            isMounted = false; // Cleanup flag when the component is unmounted
+        };
+    }, []);
+    
+
     return (
         <main>
             <div className="container">
@@ -37,14 +88,21 @@ const ConfirmOrder = () => {
                     <div className="order-summary">
                         <h2>Order Summary</h2>
                         <ul>
-                            {order.items.map((item, index) => (
-                                <li key={index}>
-                                    <strong>{item.name}</strong> - {item.quantity} x ${item.price}
-                                </li>
-                            ))}
+                            {products?.length > 0 ? (
+                                products.map((product) => (
+                                    <li>
+                                        <div>
+                                            <img src={product?.imagePaths[0]} height="50px" width="50px" />
+                                        </div>
+                                        <div>
+                                            <strong>{product?.product_name}</strong> - {product?.length} x ₹{product?.price}
+                                        </div>
+                                        <hr />
+                                    </li>))) : <></>
+                            }
                         </ul>
                         <div className="total-price">
-                            <strong>Total Price: ${order.totalPrice}</strong>
+                            <strong>Total Price: ₹{totalPrice}</strong>
                         </div>
                     </div>
 
@@ -57,7 +115,7 @@ const ConfirmOrder = () => {
                             >
                                 {isLoading ? "Processing..." : "Confirm Order"}
                             </button>
-                            <button className="cancel-button" onClick={handleCancelOrder}>
+                            <button onClick={cancelOrder} className="cancel-button">
                                 Cancel
                             </button>
                         </div>

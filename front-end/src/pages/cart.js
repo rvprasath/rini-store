@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../css/cart.css";
 import { toast, Bounce } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
+    const [id, setId] = useState();
+    const navigate = useNavigate();
 
 
     // Fetch cart items from backend
     const fetchCartItems = async () => {
         try {
+            let ids = [];
             const userId = JSON.parse(localStorage.getItem('user')).id; // Get user ID from localStorage
             const response = await axios.get(`/getCartItems?userId=${userId}`);
             let productsResponse = response.data;
             for (let i = 0; i < productsResponse.length; i++) {
                 let imageArr = [];
+                ids.push(productsResponse[i].id);
                 if (productsResponse[i].image_path.includes(",")) {
                     let image_path_arr = productsResponse[i].image_path.split("/");
                     let images = image_path_arr[2].split(",");
@@ -27,6 +32,7 @@ const Cart = () => {
                     productsResponse[i].imagePaths = [productsResponse[i].image_path];
                 }
             }
+            setId(ids);
             setCartItems(productsResponse);
         } catch (error) {
             console.error("Error fetching cart items:", error);
@@ -37,6 +43,7 @@ const Cart = () => {
         fetchCartItems();
     }, []);
 
+    const dataToSend = { name: 'John Doe', age: 30 };
     const removeCart = async (cart_id) => {
         await axios.delete(`/removeCart?cartId=${cart_id}`).then(response => {
             toast.success('Removed from cart', {
@@ -55,6 +62,11 @@ const Cart = () => {
                 window.location.reload()
             }, 500);
         })
+    }
+
+    const confirmOrder = () => {
+        localStorage.setItem("orderData", id);
+        navigate("/confirmOrder")
     }
 
     return (
@@ -83,6 +95,11 @@ const Cart = () => {
                             </div>
                         ))
                     )}
+                    <div class="proceedCheckout-container">
+                        <button className="remove-btn" onClick={confirmOrder}>
+                            Proceed Checkout
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>

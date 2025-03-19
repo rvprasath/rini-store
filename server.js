@@ -108,6 +108,17 @@ app.get('/product/:id', (req, res) => {
     });
 });
 
+app.get('/productIds', (req, res) => {
+    const ids = req.query.ids.split(",").map(id => parseInt(id));
+    const query = `SELECT * from products WHERE id IN(${ids})`;
+    db.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: "Error creating product" });
+        }
+        res.json(results);
+    });
+});
+
 app.get('/category/product/:categoryId', (req, res) => {
     let categoryId = parseInt(req.params.categoryId);
     const query = `SELECT p.*,c.category_name from products as p inner join categories as c on p.category_id = c.id WHERE p.category_id=${categoryId}`;

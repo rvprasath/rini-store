@@ -106,3 +106,12 @@ h2 {
 .remove-btn:hover {
     background-color: #c0392b;
 }
+
+.proceedCheckout-container {
+    text-align: right;
+    padding: 20px 0px;
+}
+
+.proceedCheckout-container button {
+    background-color: #9d645e;
+}

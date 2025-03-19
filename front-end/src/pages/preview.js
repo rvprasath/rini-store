@@ -5,7 +5,7 @@ import brand from "../images/brand.png";
 import receipient from "../images/recipient.png";
 import replacement from "../images/replacement.png";
 import React, { useEffect, useState, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as CANNON from 'cannon-es';
@@ -15,6 +15,7 @@ import { toast, Bounce } from "react-toastify";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
+import { percentage } from "../utility";
 
 function Preview() {
     const location = useLocation();
@@ -28,6 +29,7 @@ function Preview() {
     const [model, setModel] = useState(null);
     const [isSingleImage, setIsSingleImage] = useState(false);
     const [tryOnOff, setTryOnOff] = useState("off");
+    const [id, setId] = useState();
 
     let world, physicsMaterial, body;
     let leftShoulder, rightShoulder, leftHand, rightHand;
@@ -40,6 +42,7 @@ function Preview() {
     const armRightBotBoneName = 'arm_right_bot';
 
     const [src, setSrc] = useState();
+    const navigate = useNavigate();
 
     const changeImage = (e, image) => {
         setSrc(image)
@@ -56,52 +59,49 @@ function Preview() {
         }
     }, [products]);
 
-    let id;
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
-        id = urlParams.get('id');
-    }, [location]);
+        let productId = urlParams.get('id');
+        setId(productId);
+        fetchProduct(productId);
+    }, []);
 
     // Fetch product data after the component is mounted
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(`/product/${id}`);
-                let productsResponse = response.data;
-                // for (let i = 0; i < productsResponse.length; i++) {
-                let imageArr = [];
-                if (productsResponse.image_path.includes(",")) {
-                    let image_path_arr = productsResponse.image_path.split("/");
-                    let images = image_path_arr[2].split(",");
-                    let dir = "/" + image_path_arr[1] + "/";
-                    for (let j = 0; j < images.length; j++) {
-                        if (images[j].includes(".glb")) {
-                            productsResponse.glbPath = dir + images[j];
-                            setTryOnOff("on")
-                        } else {
-                            if (j == 0) {
-                                setSrc(dir + images[j])
-                            }
-                            imageArr.push(dir + images[j]);
-                            productsResponse.glbPath = [];
+    const fetchProduct = async (productId) => {
+        try {
+            const response = await axios.get(`/product/${productId}`);
+            let productsResponse = response.data;
+            // for (let i = 0; i < productsResponse.length; i++) {
+            let imageArr = [];
+            if (productsResponse.image_path.includes(",")) {
+                let image_path_arr = productsResponse.image_path.split("/");
+                let images = image_path_arr[2].split(",");
+                let dir = "/" + image_path_arr[1] + "/";
+                for (let j = 0; j < images.length; j++) {
+                    if (images[j].includes(".glb")) {
+                        productsResponse.glbPath = dir + images[j];
+                        setTryOnOff("on")
+                    } else {
+                        if (j == 0) {
+                            setSrc(dir + images[j])
                         }
+                        imageArr.push(dir + images[j]);
+                        productsResponse.glbPath = [];
                     }
-                    productsResponse.imagePaths = imageArr;
-                } else {
-                    setSrc(productsResponse.image_path)
-                    productsResponse.imagePaths = [productsResponse.image_path];
-                    productsResponse.glbPath = [productsResponse.image_path];
-                    setTryOnOff("off")
                 }
-                // }
-                setProducts(productsResponse);
-            } catch (error) {
-                console.error("Error fetching product:", error);
+                productsResponse.imagePaths = imageArr;
+            } else {
+                setSrc(productsResponse.image_path)
+                productsResponse.imagePaths = [productsResponse.image_path];
+                productsResponse.glbPath = [productsResponse.image_path];
+                setTryOnOff("off")
             }
-        };
-
-        fetchProduct();
-    }, [id]);
+            // }
+            setProducts(productsResponse);
+        } catch (error) {
+            console.error("Error fetching product:", error);
+        }
+    };
 
     // Initialize the scene only after product data is fetched
     useEffect(() => {
@@ -354,6 +354,11 @@ function Preview() {
         arrows: true
     };
 
+    const confirmOrder = () => {
+        localStorage.setItem("orderData", id);
+        navigate("/confirmOrder")
+    }
+
     return (
         <>
             <main>
@@ -392,7 +397,7 @@ function Preview() {
                                     <div class="image-section">
                                         <div class="thumbnail-container">
                                             {products.imagePaths && products.imagePaths.map((image, index) => (
-                                                <img src={image} class={`thumbnail ${index == 0 ? 'active' : ''}`} onClick={(e) => changeImage(e,image)} />
+                                                <img src={image} class={`thumbnail ${index == 0 ? 'active' : ''}`} onClick={(e) => changeImage(e, image)} />
                                             ))}
                                         </div>
                                         <div class="product-image-container">
@@ -411,7 +416,7 @@ function Preview() {
                             <div className="product-price">
                                 <span id="price">₹{products?.price}</span>
                                 <span className="strike-price" id="strikePrice">₹{products?.strike_price}</span>
-                                <span className="discount">&nbsp;(80% off)</span>
+                                <span className="discount">&nbsp;({percentage(products?.price, products?.strike_price)} off)</span>
                             </div>
 
                             <div className="parameter-container">
@@ -445,9 +450,9 @@ function Preview() {
                             <div className="product-buttons">
                                 <button className="btn btn-success" onClick={() => addToCart(products.id)}>Add To Cart</button>
                                 {user ? (
-                                    <Link to="/confirmOrder" className="btn btn-warning buy-buton" onClick={handleBuyNowClick}>
+                                    <button className="btn btn-warning buy-buton" onClick={confirmOrder}>
                                         Buy Now
-                                    </Link>
+                                    </button>
                                 ) : (
                                     <button className="btn btn-warning" onClick={handleBuyNowClick}>
                                         Login to Buy

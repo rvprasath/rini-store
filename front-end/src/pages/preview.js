@@ -81,6 +81,7 @@ function Preview() {
                     if (images[j].includes(".glb")) {
                         productsResponse.glbPath = dir + images[j];
                         setTryOnOff("on")
+                        break;
                     } else {
                         if (j == 0) {
                             setSrc(dir + images[j])
@@ -236,7 +237,7 @@ function Preview() {
         const loader = new GLTFLoader();
         loader.load(products.glbPath, (gltf) => { // Use products.image_path here
             const model = gltf.scene;
-            model.scale.set(1, 1, 1); // Adjusted scaling
+            model.scale.set(2,2,2); // Adjusted scaling
             model.traverse((child) => {
                 if (child.isMesh) {
                     child.material = new THREE.MeshStandardMaterial({

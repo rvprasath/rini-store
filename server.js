@@ -60,7 +60,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/upload", upload.array("files", 10), (req, res) => {
     let filePath;
-    const { productName, price, strikePrice, category } = req.body;
+    const { productName, description, price, strikePrice, category } = req.body;
 
     if (req.files.length > 0) {
         let fileNameArr = [];
@@ -71,12 +71,12 @@ app.post("/upload", upload.array("files", 10), (req, res) => {
     } else {
         filePath = `/s3/${req.files[0].filename}`;
     }
-    console.log(filePath)
     const escapedProductName = mysql.escape(productName);
+    const escapedDescription = mysql.escape(description);
     const escapedFilePath = mysql.escape(filePath);
     let product;
-    const query = `INSERT INTO products (product_name, category_id, price, strike_price, image_path) 
-               VALUES (${escapedProductName}, ${category}, ${price}, ${strikePrice}, ${escapedFilePath})`;
+    const query = `INSERT INTO products (product_name, description, category_id, price, strike_price, image_path) 
+               VALUES (${escapedProductName}, ${escapedDescription}, ${category}, ${price}, ${strikePrice}, ${escapedFilePath})`;
     console.log(query)
     db.query(query, (err, results) => {
         if (err) {

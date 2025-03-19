@@ -39,6 +39,14 @@ function Preview() {
     const armRightTopBoneName = 'arm_right_top';
     const armRightBotBoneName = 'arm_right_bot';
 
+    const [src, setSrc] = useState();
+
+    const changeImage = (e, image) => {
+        setSrc(image)
+        document.querySelectorAll(".thumbnail").forEach(img => img.classList.remove("active"));
+        // thumbnail.classList.add("active");
+    }
+
     useEffect(() => {
         // Check if there is only one image
         if (products != null && products.image_path.split(",").length === 1) {
@@ -71,11 +79,16 @@ function Preview() {
                             productsResponse.glbPath = dir + images[j];
                             setTryOnOff("on")
                         } else {
+                            if (j == 0) {
+                                setSrc(dir + images[j])
+                            }
                             imageArr.push(dir + images[j]);
+                            productsResponse.glbPath = [];
                         }
                     }
                     productsResponse.imagePaths = imageArr;
                 } else {
+                    setSrc(productsResponse.image_path)
                     productsResponse.imagePaths = [productsResponse.image_path];
                     productsResponse.glbPath = [productsResponse.image_path];
                     setTryOnOff("off")
@@ -347,37 +360,53 @@ function Preview() {
                 <div className="menu-header"><h2>Product Details</h2></div>
                 <div className="container">
                     <div className="product">
-                        <div className={`product-slider-container ${isSingleImage ? 'singleImage' : ''}`}>
-                            {products != null ?
-                                < Slider {...settings}>
-                                    {products.glbPath.includes(".glb") ?
-                                        <div className="slider-item">
-                                            <div className="product-image">
-                                                <div class="model-tag">3D Model</div>
-                                                <div className="video-container">
-                                                    <video ref={videoElement} id="video" width="640" height="480"></video>
-                                                </div>
-                                                <div className="canvas-container" ref={canvasContainer}></div>
-                                            </div>
-                                        </div>
-                                        : null
-                                    }
-                                    {products.imagePaths && products.imagePaths.map((image, index) => (
-                                        <div className="slider-item">
-                                            <div className="product-image">
-                                                <div className="video-container">
-                                                    <img height="480" width="640" src={image} alt={`Product Image ${index + 1}`} />
+                        {products != null ?
+                            products.category_id != 3 ?
+                                (<div className={`product-slider-container ${isSingleImage ? 'singleImage' : ''}`}>
+                                    < Slider {...settings}>
+                                        {products.glbPath.includes(".glb") ?
+                                            <div className="slider-item">
+                                                <div className="product-image">
+                                                    <div class="model-tag">3D Model</div>
+                                                    <div className="video-container">
+                                                        <video ref={videoElement} id="video" width="640" height="480"></video>
+                                                    </div>
+                                                    <div className="canvas-container" ref={canvasContainer}></div>
                                                 </div>
                                             </div>
+                                            : null
+                                        }
+                                        {products.imagePaths && products.imagePaths.map((image, index) => (
+                                            <div className="slider-item">
+                                                <div className="product-image">
+                                                    <div className="video-container">
+                                                        <img height="480" width="640" src={image} alt={`Product Image ${index + 1}`} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                </div>)
+                                :
+                                <div className="product-slider-container">
+                                    <div class="image-section">
+                                        <div class="thumbnail-container">
+                                            {products.imagePaths && products.imagePaths.map((image, index) => (
+                                                <img src={image} class={`thumbnail ${index == 0 ? 'active' : ''}`} onClick={(e) => changeImage(e,image)} />
+                                            ))}
                                         </div>
-                                    ))}
-                                </Slider> : <></>
-                            }
-                        </div>
+                                        <div class="product-image-container">
+                                            <img src={src} height="480" width="640" class="main-image" id="mainImage" />
+                                        </div>
+                                    </div>
+                                </div>
+                            : <></>
+                        }
 
                         <div className="product-details">
                             <h1 className="product-title">RINI</h1>
-                            <h3 className="product-description" id="desc">{products?.product_name}</h3>
+                            <h3 className="product-name" id="desc">{products?.product_name}</h3>
+                            <h3 className="product-description" id="desc">{products?.description}</h3>
 
                             <div className="product-price">
                                 <span id="price">₹{products?.price}</span>

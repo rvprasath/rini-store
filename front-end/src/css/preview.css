@@ -541,3 +541,62 @@
     border-radius: 3px;
     top: 10px;
 }
+
+.fabricpreview-container {
+    display: flex;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-section {
+    display: flex;
+}
+
+.thumbnail-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+    border-color: #007bff;
+}
+
+.fabricpreview-product-details {
+    margin-left: 20px;
+    max-width: 300px;
+}
+
+h2 {
+    margin: 0 0 10px;
+}
+
+/* Styles for the container */
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+    height: auto;
+}
+
+/* Styles for the image inside the container */
+.product-image-container img {
+    transition: transform 0.5s ease;
+}
+
+/* Zoom effect on hover */
+.product-image-container:hover img {
+    transform: scale(2);
+    /* Zoom in the image by 20% */
+}

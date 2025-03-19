@@ -9,6 +9,7 @@ import { toast, Bounce } from "react-toastify";
 const Admin = () => {
     const [files, setFiles] = useState([]);
     const [productName, setProductName] = useState("");
+    const [productDescription, setProductDescription] = useState("");
     const [price, setPrice] = useState("");
     const [strikePrice, setStrikePrice] = useState("");
     const [category, setCategory] = useState("");
@@ -28,6 +29,7 @@ const Admin = () => {
             formData.append("files", files[i]);
         }
         formData.append("productName", productName);
+        formData.append("description", productDescription);
         formData.append("price", price);
         formData.append("strikePrice", strikePrice);
         formData.append("category", category);
@@ -91,6 +93,18 @@ const Admin = () => {
                                 </div>
 
                                 <div className="form-group">
+                                    <label>Product Description</label>
+                                    <textarea
+                                        type="text"
+                                        value={productDescription}
+                                        onChange={(e) => setProductDescription(e.target.value)}
+                                        required>
+                                    </textarea>
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
                                     <label>Category</label>
                                     <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                                         <option value="">Select Category</option>
@@ -99,9 +113,7 @@ const Admin = () => {
                                         <option value="3">Fabrics</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <div className="form-row">
                                 <div className="form-group">
                                     <label>Price</label>
                                     <input
@@ -111,7 +123,9 @@ const Admin = () => {
                                         required
                                     />
                                 </div>
+                            </div>
 
+                            <div className="form-row">
                                 <div className="form-group">
                                     <label>Strike Through Price</label>
                                     <input
@@ -121,17 +135,18 @@ const Admin = () => {
                                         required
                                     />
                                 </div>
+
+                                <div className="form-group">
+                                    <label>Upload Files (Images, GLB, etc.)</label>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        onChange={handleFileChange}
+                                        accept="image/*, .glb"
+                                    />
+                                </div>
                             </div>
 
-                            <div className="form-group">
-                                <label>Upload Files (Images, GLB, etc.)</label>
-                                <input
-                                    type="file"
-                                    multiple
-                                    onChange={handleFileChange}
-                                    accept="image/*, .glb"
-                                />
-                            </div>
                             <div class="UploadProductBtn-container">
                                 <button type="submit">Upload Product</button>
                             </div>

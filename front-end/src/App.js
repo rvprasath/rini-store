@@ -14,6 +14,7 @@ import Admin from './pages/admin/Admin';
 import AdminPageTemplate from "./pages/admin/adminPageTemplate"
 import ProductListPage from './pages/admin/productList';
 import Cart from './pages/cart';
+import FabricPreview from './pages/fabricPreview';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/confirmOrder" element={<ConfirmOrder />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/fabricPreview" element={<FabricPreview />} />
             {/* <Route path="*" element={<NoPage />} /> */}
           </Route>
           <Route path="/" element={<AdminPageTemplate />}>

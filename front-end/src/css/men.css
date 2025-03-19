@@ -43,7 +43,7 @@
 }
 
 /* Style for the product description */
-.product-description {
+.product-description, .product-name {
     font-family: 'Calibri Light', sans-serif;
     font-size: 15px;
     margin: 10px 0;

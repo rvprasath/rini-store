@@ -4,7 +4,6 @@ require('dotenv').config();
 
 module.exports = {
     UPLOAD_DIR: process.env.UPLOAD_DIR || '/Users/macbook/Public/Shrinidhi_Project/s3',
-    LOGS_DIR: process.env.LOGS_DIR || '/Users/macbook/Public/Shrinidhi_Project/logs',
     HOST: 'localhost',
     USER: '',
     PASSWORD: '',
